@@ -1,0 +1,922 @@
+-- Copiando estrutura para tabela edurondon.erp_compras
+CREATE TABLE IF NOT EXISTS `erp_compras` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `numero_requisicao` char(50) COLLATE utf8_bin NOT NULL,
+  `membro_comprador_system_users_id` int(11) NOT NULL,
+  `erp_forma_pagamento_id` int(10) unsigned NOT NULL,
+  `erp_destinacao_recurso_id` int(10) unsigned NOT NULL,
+  `erp_cotacao_id` int(11) DEFAULT '0',
+  `valor_total` double(65,2) DEFAULT '0.00',
+  `data_compra` date DEFAULT NULL,
+  `erp_status_compra_id` int(10) unsigned DEFAULT NULL,
+  `active` char(1) COLLATE utf8_bin NOT NULL DEFAULT 'Y',
+  `data_lancamento` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `FK_erp_compras_erp_cotacao` (`erp_cotacao_id`),
+  KEY `FK_erp_compras_erp_status_compra` (`erp_status_compra_id`),
+  KEY `FK_erp_compras_erp_forma_pagamento` (`erp_forma_pagamento_id`),
+  KEY `FK_erp_compras_erp_destinacao_recurso` (`erp_destinacao_recurso_id`),
+  KEY `FK_erp_compras_system_user` (`membro_comprador_system_users_id`) USING BTREE,
+  CONSTRAINT `FK_erp_compras_erp_cotacao` FOREIGN KEY (`erp_cotacao_id`) REFERENCES `erp_cotacao` (`id`),
+  CONSTRAINT `FK_erp_compras_erp_destinacao_recurso` FOREIGN KEY (`erp_destinacao_recurso_id`) REFERENCES `erp_destinacao_recurso` (`id`),
+  CONSTRAINT `FK_erp_compras_erp_forma_pagamento` FOREIGN KEY (`erp_forma_pagamento_id`) REFERENCES `erp_forma_pagamento` (`id`),
+  CONSTRAINT `FK_erp_compras_erp_status_compra` FOREIGN KEY (`erp_status_compra_id`) REFERENCES `erp_status_compra` (`id`),
+  CONSTRAINT `FK_erp_compras_system_users` FOREIGN KEY (`membro_comprador_system_users_id`) REFERENCES `system_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.erp_compras_itens
+CREATE TABLE IF NOT EXISTS `erp_compras_itens` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `valor` double(65,2) NOT NULL DEFAULT '0.00',
+  `erp_produtos_id` int(11) NOT NULL DEFAULT '0',
+  `qtd` double NOT NULL DEFAULT '0',
+  `erp_compras_id` int(11) NOT NULL DEFAULT '0',
+  `data_lancamento` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `FK_erp_compras_itens_erp_compras` (`erp_compras_id`),
+  KEY `FK_erp_compras_itens_erp_produtos` (`erp_produtos_id`),
+  CONSTRAINT `FK_erp_compras_itens_erp_compras` FOREIGN KEY (`erp_compras_id`) REFERENCES `erp_compras` (`id`),
+  CONSTRAINT `FK_erp_compras_itens_erp_produtos` FOREIGN KEY (`erp_produtos_id`) REFERENCES `erp_produtos` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.erp_contas_pagar
+CREATE TABLE IF NOT EXISTS `erp_contas_pagar` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `data_emissao` date NOT NULL,
+  `data_vencimento` date NOT NULL,
+  `data_pgto` date DEFAULT NULL,
+  `valor` decimal(10,2) NOT NULL,
+  `status_pagamento` varchar(20) DEFAULT NULL COMMENT '''Pendente'' => ''Pendente'',\r\n''Pago'' => ''Pago'',\r\n''Atrasado'' => ''Atrasado'',\r\n''Cancelado'' => ''Cancelado'',\r\n''Suspenso'' => ''Suspenso''',
+  `chave_nfe` varchar(255) DEFAULT NULL,
+  `responsavel_id` int(10) NOT NULL,
+  `erp_lcto_historico_id` int(10) unsigned NOT NULL,
+  `erp_destinacao_recurso_id` int(10) unsigned NOT NULL,
+  `erp_forma_pagamento_id` int(10) unsigned NOT NULL,
+  `conta_debito` int(11) unsigned NOT NULL,
+  `erp_pessoa_fornecedor_id` int(10) unsigned DEFAULT '0',
+  `observacao` text,
+  `active` varchar(1) DEFAULT 'Y',
+  `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `transferido_tesouraria` varchar(1) NOT NULL DEFAULT 'N',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `FK_erp_contas_pagar_erp_pessoa_fornecedor` (`erp_pessoa_fornecedor_id`) USING BTREE,
+  KEY `FK_erp_contas_pagar_erp_destinacao_recurso` (`erp_destinacao_recurso_id`),
+  KEY `FK_erp_contas_pagar_erp_lcto_historico` (`erp_lcto_historico_id`),
+  KEY `FK_erp_contas_pagar_erp_plano_contas` (`conta_debito`) USING BTREE,
+  KEY `FK_erp_contas_pagar_system_user` (`responsavel_id`) USING BTREE,
+  KEY `FK_erp_contas_pagar_erp_forma_pagamento` (`erp_forma_pagamento_id`) USING BTREE,
+  CONSTRAINT `FK_erp_contas_pagar_erp_destinacao_recurso` FOREIGN KEY (`erp_destinacao_recurso_id`) REFERENCES `erp_destinacao_recurso` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_erp_contas_pagar_erp_forma_pagamento` FOREIGN KEY (`erp_forma_pagamento_id`) REFERENCES `erp_forma_pagamento` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_erp_contas_pagar_erp_lcto_historico` FOREIGN KEY (`erp_lcto_historico_id`) REFERENCES `erp_lcto_historico` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_erp_contas_pagar_erp_pessoa_fornecedor` FOREIGN KEY (`erp_pessoa_fornecedor_id`) REFERENCES `erp_pessoa_fornecedor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_erp_contas_pagar_erp_plano_contas` FOREIGN KEY (`conta_debito`) REFERENCES `erp_plano_contas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_erp_contas_pagar_system_user` FOREIGN KEY (`responsavel_id`) REFERENCES `system_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=999808 DEFAULT CHARSET=utf8;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.erp_contas_pagar_itens
+CREATE TABLE IF NOT EXISTS `erp_contas_pagar_itens` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `descricao` text COLLATE utf8_bin,
+  `valor` double(65,2) NOT NULL,
+  `erp_contas_pagar_id` int(10) unsigned NOT NULL,
+  `lancamento` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `FK_erp_contas_pagar_itens_erp_contas_pagar` (`erp_contas_pagar_id`) USING BTREE,
+  CONSTRAINT `FK_erp_contas_pagar_itens_erp_contas_pagar` FOREIGN KEY (`erp_contas_pagar_id`) REFERENCES `erp_contas_pagar` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9602 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.erp_contas_receber
+CREATE TABLE IF NOT EXISTS `erp_contas_receber` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `data_emissao` date NOT NULL,
+  `data_vencimento` date NOT NULL,
+  `data_recebimento` date DEFAULT NULL,
+  `valor` decimal(10,2) NOT NULL,
+  `status_pagamento` varchar(20) DEFAULT NULL COMMENT '''Pendente'' => ''Pendente'',\r\n''Pago'' => ''Pago'',\r\n''Atrasado'' => ''Atrasado'',\r\n''Cancelado'' => ''Cancelado'',\r\n''Suspenso'' => ''Suspenso''',
+  `chave_nfe` varchar(255) DEFAULT NULL,
+  `responsavel_id` int(10) NOT NULL,
+  `erp_lcto_historico_id` int(10) unsigned NOT NULL,
+  `erp_forma_pagamento_id` int(10) unsigned NOT NULL,
+  `conta_credito` int(11) unsigned NOT NULL,
+  `observacao` text,
+  `active` varchar(1) DEFAULT NULL,
+  `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `transferido_tesouraria` varchar(1) NOT NULL DEFAULT 'N',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `FK_erp_contas_receber_erp_lcto_historico` (`erp_lcto_historico_id`),
+  KEY `FK_erp_contas_receber_system_user` (`responsavel_id`) USING BTREE,
+  KEY `FK_erp_contas_receber_erp_forma_pagamento` (`erp_forma_pagamento_id`) USING BTREE,
+  KEY `FK_erp_contas_receber_erp_plano_contas` (`conta_credito`) USING BTREE,
+  CONSTRAINT `FK_erp_contas_receber_erp_forma_pagamento` FOREIGN KEY (`erp_forma_pagamento_id`) REFERENCES `erp_forma_pagamento` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_erp_contas_receber_erp_lcto_historico` FOREIGN KEY (`erp_lcto_historico_id`) REFERENCES `erp_lcto_historico` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_erp_contas_receber_erp_plano_contas` FOREIGN KEY (`conta_credito`) REFERENCES `erp_plano_contas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_erp_contas_receber_system_user` FOREIGN KEY (`responsavel_id`) REFERENCES `system_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=1785836 DEFAULT CHARSET=utf8;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.erp_contas_receber_itens
+CREATE TABLE IF NOT EXISTS `erp_contas_receber_itens` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `descricao` text COLLATE utf8_bin,
+  `valor` double(65,2) NOT NULL,
+  `erp_contas_receber_id` int(10) unsigned NOT NULL,
+  `lancamento` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `FK_erp_contas_receber_itens_erp_contas_receber` (`erp_contas_receber_id`) USING BTREE,
+  CONSTRAINT `FK_erp_contas_receber_itens_erp_contas_receber` FOREIGN KEY (`erp_contas_receber_id`) REFERENCES `erp_contas_receber` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=24462 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.erp_cotacao
+CREATE TABLE IF NOT EXISTS `erp_cotacao` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `finalidade` text COLLATE utf8_bin,
+  `erp_pessoa_fornecedor_id` int(10) unsigned NOT NULL,
+  `vencimento_proposta` date NOT NULL,
+  `valor_total` double(65,2) DEFAULT '0.00',
+  `active` varchar(1) COLLATE utf8_bin NOT NULL DEFAULT 'Y',
+  `data_lancamento` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `FK_erp_cotacao_erp_pessoa_fornecedor` (`erp_pessoa_fornecedor_id`),
+  CONSTRAINT `FK_erp_cotacao_erp_pessoa_fornecedor` FOREIGN KEY (`erp_pessoa_fornecedor_id`) REFERENCES `erp_pessoa_fornecedor` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.erp_cotacao_itens
+CREATE TABLE IF NOT EXISTS `erp_cotacao_itens` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `valor` double(65,2) DEFAULT '0.00',
+  `erp_produtos_id` int(11) DEFAULT NULL,
+  `qtd` double(65,2) DEFAULT '1.00',
+  `erp_cotacao_id` int(11) DEFAULT NULL,
+  `data_lancamento` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `FK_erp_cotacao_itens_erp_cotacao` (`erp_cotacao_id`),
+  KEY `FK_if_empenhos_itens_if_produtos` (`erp_produtos_id`),
+  CONSTRAINT `FK_erp_cotacao_itens_erp_cotacao` FOREIGN KEY (`erp_cotacao_id`) REFERENCES `erp_cotacao` (`id`),
+  CONSTRAINT `FK_if_empenhos_itens_if_produtos` FOREIGN KEY (`erp_produtos_id`) REFERENCES `erp_produtos` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.erp_destinacao_recurso
+CREATE TABLE IF NOT EXISTS `erp_destinacao_recurso` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(150) COLLATE utf8_bin NOT NULL DEFAULT '0',
+  `description` text COLLATE utf8_bin NOT NULL,
+  `active` char(1) COLLATE utf8_bin NOT NULL DEFAULT 'Y',
+  `data_lancamento` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.erp_forma_pagamento
+CREATE TABLE IF NOT EXISTS `erp_forma_pagamento` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) COLLATE utf8_bin NOT NULL,
+  `description` text COLLATE utf8_bin NOT NULL,
+  `active` varchar(1) COLLATE utf8_bin DEFAULT 'Y',
+  `data_lancamento` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.erp_lcto_historico
+CREATE TABLE IF NOT EXISTS `erp_lcto_historico` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(150) COLLATE utf8_bin NOT NULL,
+  `active` char(1) COLLATE utf8_bin NOT NULL DEFAULT 'Y',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.erp_lcto_tesouraria
+CREATE TABLE IF NOT EXISTS `erp_lcto_tesouraria` (
+  `id` int(12) unsigned NOT NULL AUTO_INCREMENT,
+  `data_pgto` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `erp_forma_pagamento_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `erp_lcto_historico_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `conta_debito` int(11) unsigned NOT NULL,
+  `conta_credito` int(11) unsigned NOT NULL,
+  `valor` double(65,2) NOT NULL,
+  `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `active` char(1) COLLATE utf8_bin NOT NULL DEFAULT 'Y',
+  `responsavel_id` int(11) DEFAULT '1',
+  `erp_contas_pagar_id` int(11) DEFAULT NULL,
+  `erp_contas_receber_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_erp_lcto_tesouraria_erp_forma_pagamento` (`erp_forma_pagamento_id`),
+  KEY `FK_erp_lcto_tesouraria_erp_lcto_historico` (`erp_lcto_historico_id`),
+  KEY `FK_erp_lcto_tesouraria_erp_plano_contas_2` (`conta_credito`) USING BTREE,
+  KEY `FK_erp_lcto_tesouraria_erp_plano_contas` (`conta_debito`) USING BTREE,
+  KEY `FK_erp_lcto_tesouraria_system_user` (`responsavel_id`),
+  CONSTRAINT `FK_erp_lcto_tesouraria_erp_forma_pagamento` FOREIGN KEY (`erp_forma_pagamento_id`) REFERENCES `erp_forma_pagamento` (`id`),
+  CONSTRAINT `FK_erp_lcto_tesouraria_erp_lcto_historico` FOREIGN KEY (`erp_lcto_historico_id`) REFERENCES `erp_lcto_historico` (`id`),
+  CONSTRAINT `FK_erp_lcto_tesouraria_erp_plano_contas` FOREIGN KEY (`conta_debito`) REFERENCES `erp_plano_contas` (`id`),
+  CONSTRAINT `FK_erp_lcto_tesouraria_erp_plano_contas_2` FOREIGN KEY (`conta_credito`) REFERENCES `erp_plano_contas` (`id`),
+  CONSTRAINT `FK_erp_lcto_tesouraria_system_user` FOREIGN KEY (`responsavel_id`) REFERENCES `system_users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14857749 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.erp_lcto_tesouraria_itens
+CREATE TABLE IF NOT EXISTS `erp_lcto_tesouraria_itens` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `erp_lcto_tesouraria_id` int(12) unsigned NOT NULL,
+  `valor` double(65,2) NOT NULL,
+  `system_unit_id` int(11) NOT NULL,
+  `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `FK_erp_lcto_tesouraria_itens_erp_lcto_tesouraria` (`erp_lcto_tesouraria_id`) USING BTREE,
+  KEY `FK_erp_lcto_tesouraria_itens_system_unit` (`system_unit_id`) USING BTREE,
+  CONSTRAINT `FK_erp_lcto_tesouraria_itens_erp_lcto_tesouraria` FOREIGN KEY (`erp_lcto_tesouraria_id`) REFERENCES `erp_lcto_tesouraria` (`id`),
+  CONSTRAINT `FK_erp_lcto_tesouraria_itens_system_unit` FOREIGN KEY (`system_unit_id`) REFERENCES `system_unit` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.erp_pessoa_fornecedor
+CREATE TABLE IF NOT EXISTS `erp_pessoa_fornecedor` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `cnpj` varchar(30) COLLATE utf8_bin NOT NULL,
+  `responsavel` varchar(150) COLLATE utf8_bin DEFAULT NULL,
+  `contato` varchar(150) COLLATE utf8_bin DEFAULT NULL,
+  `telefones` varchar(150) COLLATE utf8_bin DEFAULT NULL,
+  `fantasia` varchar(150) COLLATE utf8_bin DEFAULT NULL,
+  `razao_social` varchar(150) COLLATE utf8_bin DEFAULT NULL,
+  `active` varchar(1) COLLATE utf8_bin DEFAULT 'Y' COMMENT ' Y / N',
+  `data_lancamento` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1180627 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.erp_plano_contas
+CREATE TABLE IF NOT EXISTS `erp_plano_contas` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `conta` char(20) COLLATE utf8_bin NOT NULL,
+  `descricao` varchar(150) COLLATE utf8_bin NOT NULL,
+  `active` char(1) COLLATE utf8_bin NOT NULL DEFAULT 'Y',
+  `data_lancamento` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `tipo_conta` varchar(150) COLLATE utf8_bin DEFAULT NULL,
+  `nivel_hierarquico` int(11) DEFAULT NULL,
+  `data_inicio` date DEFAULT NULL,
+  `saldo_inicial` double(65,2) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.erp_produtos
+CREATE TABLE IF NOT EXISTS `erp_produtos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` mediumtext COLLATE utf8_bin NOT NULL,
+  `descricao` mediumtext CHARACTER SET utf8 NOT NULL,
+  `erp_tipo_produto_id` int(11) NOT NULL,
+  `erp_unidade_medida_id` int(11) NOT NULL,
+  `active` char(1) COLLATE utf8_bin NOT NULL DEFAULT 'Y',
+  `valor_medio` double DEFAULT NULL,
+  `data_lancamento` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `erp_unidade_medida_id` (`erp_unidade_medida_id`),
+  KEY `FK_if_produtos_if_tipo_produto` (`erp_tipo_produto_id`),
+  CONSTRAINT `FK_erp_produtos_erp_tipo_produto` FOREIGN KEY (`erp_tipo_produto_id`) REFERENCES `erp_tipo_produto` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_erp_produtos_erp_unidade_medida` FOREIGN KEY (`erp_unidade_medida_id`) REFERENCES `erp_unidade_medida` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=35153 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.erp_status_compra
+CREATE TABLE IF NOT EXISTS `erp_status_compra` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` text COLLATE utf8_bin,
+  `description` text COLLATE utf8_bin,
+  `active` varchar(1) COLLATE utf8_bin DEFAULT 'Y',
+  `data_lancamento` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.erp_tipo_produto
+CREATE TABLE IF NOT EXISTS `erp_tipo_produto` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE utf8_bin NOT NULL,
+  `description` text CHARACTER SET utf8 NOT NULL,
+  `active` char(1) COLLATE utf8_bin NOT NULL DEFAULT 'Y',
+  `data_lancamento` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.erp_unidade_medida
+CREATE TABLE IF NOT EXISTS `erp_unidade_medida` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) CHARACTER SET utf8 NOT NULL,
+  `description` varchar(45) CHARACTER SET utf8 NOT NULL,
+  `active` varchar(1) CHARACTER SET utf8 NOT NULL DEFAULT 'Y',
+  `data_lancamento` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.ibge_bairro
+CREATE TABLE IF NOT EXISTS `ibge_bairro` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `codigo` char(10) COLLATE utf8_bin DEFAULT '0',
+  `nome` text COLLATE utf8_bin,
+  `uf` char(2) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=247 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.ibge_categoria_racial
+CREATE TABLE IF NOT EXISTS `ibge_categoria_racial` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `description` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.ibge_estado
+CREATE TABLE IF NOT EXISTS `ibge_estado` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `codigouf` int(11) NOT NULL,
+  `nome` text COLLATE utf8_bin NOT NULL,
+  `uf` char(2) COLLATE utf8_bin NOT NULL,
+  `ibge_regiao_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_ibge_estado_ibge_regiao` (`ibge_regiao_id`),
+  CONSTRAINT `FK_ibge_estado_ibge_regiao` FOREIGN KEY (`ibge_regiao_id`) REFERENCES `ibge_regiao` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.ibge_logradouros
+CREATE TABLE IF NOT EXISTS `ibge_logradouros` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `num_cep` int(11) unsigned zerofill NOT NULL,
+  `ibge_bairro_id` int(11) NOT NULL,
+  `desc_logradouro` text NOT NULL,
+  `desc_tipo` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_ibge_logradouros_ibge_bairro` (`ibge_bairro_id`),
+  CONSTRAINT `FK_ibge_logradouros_ibge_bairro` FOREIGN KEY (`ibge_bairro_id`) REFERENCES `ibge_bairro` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.ibge_municipio
+CREATE TABLE IF NOT EXISTS `ibge_municipio` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `codigo` int(11) DEFAULT NULL,
+  `nome` text COLLATE utf8_bin NOT NULL,
+  `cidade_correspondente` text COLLATE utf8_bin NOT NULL,
+  `ibge_estado_id` int(11) NOT NULL,
+  `cep` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_ibge_municipio_ibge_estado` (`ibge_estado_id`),
+  CONSTRAINT `FK_ibge_municipio_ibge_estado` FOREIGN KEY (`ibge_estado_id`) REFERENCES `ibge_estado` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9654 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.ibge_regiao
+CREATE TABLE IF NOT EXISTS `ibge_regiao` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` text COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.system_unit
+CREATE TABLE IF NOT EXISTS `system_unit` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `code` int(10) unsigned DEFAULT NULL COMMENT 'Cód. INEP',
+  `name` varchar(100) COLLATE utf8_bin NOT NULL,
+  `connection_name` varchar(255) COLLATE utf8_bin NOT NULL,
+  `address_zone` char(50) COLLATE utf8_bin NOT NULL,
+  `address_street` varchar(250) COLLATE utf8_bin NOT NULL,
+  `address_number` char(100) COLLATE utf8_bin NOT NULL,
+  `address_district` char(50) COLLATE utf8_bin NOT NULL,
+  `ibge_municipio_id` int(11) DEFAULT NULL,
+  `telephone` char(15) COLLATE utf8_bin NOT NULL,
+  `email` char(255) COLLATE utf8_bin NOT NULL,
+  `active` char(1) COLLATE utf8_bin NOT NULL DEFAULT 'Y',
+  `custom_code` varchar(256) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_system_unit_ibge_municipio` (`ibge_municipio_id`),
+  KEY `sys_unit_name_idx` (`name`),
+  CONSTRAINT `FK_system_unit_ibge_municipio` FOREIGN KEY (`ibge_municipio_id`) REFERENCES `ibge_municipio` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela edurondon.system_users
+CREATE TABLE IF NOT EXISTS `system_users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` text COLLATE utf8_bin NOT NULL,
+  `email` varchar(100) COLLATE utf8_bin DEFAULT NULL,
+  `site` tinytext COLLATE utf8_bin,
+  `login` varchar(100) COLLATE utf8_bin DEFAULT NULL,
+  `password` varchar(100) COLLATE utf8_bin DEFAULT NULL,
+  `system_unit_id` int(11) NOT NULL DEFAULT '1',
+  `frontpage_id` int(11) DEFAULT '10',
+  `photo_path` text COLLATE utf8_bin,
+  `active` char(1) COLLATE utf8_bin DEFAULT 'Y',
+  `accepted_term_policy` char(1) COLLATE utf8_bin DEFAULT NULL,
+  `accepted_term_policy_at` varchar(256) COLLATE utf8_bin DEFAULT NULL,
+  `accepted_term_policy_data` text COLLATE utf8_bin,
+  `phone` varchar(256) COLLATE utf8_bin DEFAULT NULL,
+  `address` varchar(256) COLLATE utf8_bin DEFAULT NULL,
+  `about` varchar(256) COLLATE utf8_bin DEFAULT NULL,
+  `function_name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `custom_code` varchar(256) COLLATE utf8_bin DEFAULT NULL,
+  `otp_secret` varchar(256) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `login` (`login`),
+  KEY `sys_user_program_idx` (`frontpage_id`),
+  KEY `FK_system_user_system_unit` (`system_unit_id`),
+  CONSTRAINT `FK_system_user_system_unit` FOREIGN KEY (`system_unit_id`) REFERENCES `system_unit` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para trigger edurondon.erp_compras_itens_after_delete_atualiza_valor_medio_erp_produtos
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `erp_compras_itens_after_delete_atualiza_valor_medio_erp_produtos` AFTER DELETE ON `erp_compras_itens` FOR EACH ROW BEGIN
+UPDATE erp_compras
+   SET erp_compras.valor_total = (
+       	SELECT 	Sum((erp_compras_itens.valor * erp_compras_itens.qtd)) AS total
+			FROM 		erp_compras_itens
+			WHERE 	(erp_compras_itens.erp_compras_id = erp_compras.id)
+			limit 1)
+WHERE	(SELECT 	erp_compras_itens.erp_produtos_id
+		 FROM 	erp_compras_itens
+		 WHERE	erp_compras_itens.erp_compras_id = erp_compras.id
+		 LIMIT 1);
+
+UPDATE erp_produtos
+   SET erp_produtos.valor_medio = (
+			SELECT avg(erp_compras_itens.valor) as valor FROM erp_compras_itens
+			WHERE (erp_compras_itens.erp_produtos_id = erp_produtos.id)
+			limit 1)
+WHERE	(SELECT 	erp_compras_itens.erp_produtos_id
+		 FROM 	erp_compras_itens
+		 WHERE	erp_compras_itens.erp_produtos_id = erp_produtos.id
+		 LIMIT 1);
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- Copiando estrutura para trigger edurondon.erp_compras_itens_after_insert_atualiza_valor_medio_erp_produtos
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `erp_compras_itens_after_insert_atualiza_valor_medio_erp_produtos` AFTER INSERT ON `erp_compras_itens` FOR EACH ROW BEGIN
+UPDATE erp_compras
+   SET erp_compras.valor_total = (
+       	SELECT 	Sum((erp_compras_itens.valor * erp_compras_itens.qtd)) AS total
+			FROM 		erp_compras_itens
+			WHERE 	(erp_compras_itens.erp_compras_id = erp_compras.id)
+			limit 1)
+WHERE	(SELECT 	erp_compras_itens.erp_produtos_id
+		 FROM 	erp_compras_itens
+		 WHERE	erp_compras_itens.erp_compras_id = erp_compras.id
+		 LIMIT 1);
+
+UPDATE erp_produtos
+   SET erp_produtos.valor_medio = (
+			SELECT avg(erp_compras_itens.valor) as valor FROM erp_compras_itens
+			WHERE (erp_compras_itens.erp_produtos_id = erp_produtos.id)
+			limit 1)
+WHERE	(SELECT 	erp_compras_itens.erp_produtos_id
+		 FROM 	erp_compras_itens
+		 WHERE	erp_compras_itens.erp_produtos_id = erp_produtos.id
+		 LIMIT 1);
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- Copiando estrutura para trigger edurondon.erp_compras_itens_after_update_atualiza_valor_medio_erp_produtos
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `erp_compras_itens_after_update_atualiza_valor_medio_erp_produtos` AFTER UPDATE ON `erp_compras_itens` FOR EACH ROW BEGIN
+UPDATE erp_compras
+   SET erp_compras.valor_total = (
+       	SELECT 	Sum((erp_compras_itens.valor * erp_compras_itens.qtd)) AS total
+			FROM 		erp_compras_itens
+			WHERE 	(erp_compras_itens.erp_compras_id = erp_compras.id)
+			limit 1)
+WHERE	(SELECT 	erp_compras_itens.erp_produtos_id
+		 FROM 	erp_compras_itens
+		 WHERE	erp_compras_itens.erp_compras_id = erp_compras.id
+		 LIMIT 1);
+
+UPDATE erp_produtos
+   SET erp_produtos.valor_medio = (
+			SELECT avg(erp_compras_itens.valor) as valor FROM erp_compras_itens
+			WHERE (erp_compras_itens.erp_produtos_id = erp_produtos.id)
+			limit 1)
+WHERE	(SELECT 	erp_compras_itens.erp_produtos_id
+		 FROM 	erp_compras_itens
+		 WHERE	erp_compras_itens.erp_produtos_id = erp_produtos.id
+		 LIMIT 1);
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- Copiando estrutura para trigger edurondon.erp_contas_pagar_before_insert
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `erp_contas_pagar_before_insert` BEFORE INSERT ON `erp_contas_pagar` FOR EACH ROW BEGIN
+    IF NEW.data_pgto IS NOT NULL THEN
+        SET NEW.status_pagamento = 'Pago';
+    ELSE
+        IF NEW.data_vencimento < CURDATE() AND NEW.status_pagamento = 'Pendente' THEN
+            SET NEW.status_pagamento = 'Atrasado';
+        ELSE
+            IF NEW.data_vencimento >= CURDATE() AND NEW.status_pagamento = 'Atrasado' THEN
+                SET NEW.status_pagamento = 'Pendente';
+            END IF;
+        END IF;
+    END IF;
+
+    IF NEW.status_pagamento = 'Pago' THEN
+        SET NEW.transferido_tesouraria = 'Y';
+    END IF;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- Copiando estrutura para trigger edurondon.erp_contas_pagar_before_update
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `erp_contas_pagar_before_update` BEFORE UPDATE ON `erp_contas_pagar` FOR EACH ROW BEGIN
+    IF NEW.data_pgto IS NOT NULL THEN
+        SET NEW.status_pagamento = 'Pago';
+    ELSE
+        IF NEW.data_vencimento < CURDATE() AND NEW.status_pagamento = 'Pendente' THEN
+            SET NEW.status_pagamento = 'Atrasado';
+        ELSE
+            IF NEW.data_vencimento >= CURDATE() AND NEW.status_pagamento = 'Atrasado' THEN
+                SET NEW.status_pagamento = 'Pendente';
+            END IF;
+        END IF;
+    END IF;
+
+    IF NEW.status_pagamento = 'Pago' THEN
+        SET NEW.transferido_tesouraria = 'Y';
+    END IF;
+
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- Copiando estrutura para trigger edurondon.erp_contas_pagar_itens_after_delete
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `erp_contas_pagar_itens_after_delete` AFTER DELETE ON `erp_contas_pagar_itens` FOR EACH ROW BEGIN
+UPDATE erp_contas_pagar
+SET erp_contas_pagar.valor = (
+        SELECT SUM(erp_contas_pagar_itens.valor) AS total
+        FROM erp_contas_pagar_itens
+        WHERE erp_contas_pagar_itens.erp_contas_pagar_id = erp_contas_pagar.id
+        LIMIT 1
+    )
+WHERE erp_contas_pagar.id IN (
+        SELECT erp_contas_pagar_itens.erp_contas_pagar_id
+        FROM erp_contas_pagar_itens
+    );
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- Copiando estrutura para trigger edurondon.erp_contas_pagar_itens_after_insert
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `erp_contas_pagar_itens_after_insert` AFTER INSERT ON `erp_contas_pagar_itens` FOR EACH ROW BEGIN
+UPDATE erp_contas_pagar
+SET erp_contas_pagar.valor = (
+        SELECT SUM(erp_contas_pagar_itens.valor) AS total
+        FROM erp_contas_pagar_itens
+        WHERE erp_contas_pagar_itens.erp_contas_pagar_id = erp_contas_pagar.id
+        LIMIT 1
+    )
+WHERE erp_contas_pagar.id IN (
+        SELECT erp_contas_pagar_itens.erp_contas_pagar_id
+        FROM erp_contas_pagar_itens
+    );
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- Copiando estrutura para trigger edurondon.erp_contas_pagar_itens_after_update
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `erp_contas_pagar_itens_after_update` AFTER UPDATE ON `erp_contas_pagar_itens` FOR EACH ROW BEGIN
+UPDATE erp_contas_pagar
+SET erp_contas_pagar.valor = (
+        SELECT SUM(erp_contas_pagar_itens.valor) AS total
+        FROM erp_contas_pagar_itens
+        WHERE erp_contas_pagar_itens.erp_contas_pagar_id = erp_contas_pagar.id
+        LIMIT 1
+    )
+WHERE erp_contas_pagar.id IN (
+        SELECT erp_contas_pagar_itens.erp_contas_pagar_id
+        FROM erp_contas_pagar_itens
+    );
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- Copiando estrutura para trigger edurondon.erp_contas_receber_after_update
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `erp_contas_receber_after_update` AFTER UPDATE ON `erp_contas_receber` FOR EACH ROW BEGIN
+
+
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- Copiando estrutura para trigger edurondon.erp_contas_receber_before_insert
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `erp_contas_receber_before_insert` BEFORE INSERT ON `erp_contas_receber` FOR EACH ROW BEGIN
+    IF NEW.data_vencimento < CURDATE() AND NEW.status_pagamento = 'Pendente' THEN
+        SET NEW.status_pagamento = 'Atrasado';
+    ELSE
+        IF NEW.data_vencimento >= CURDATE() AND NEW.status_pagamento = 'Atrasado' THEN
+            SET NEW.status_pagamento = 'Pendente';
+        END IF;
+    END IF;
+
+	 IF NEW.status_pagamento = 'Pago' THEN
+        SET NEW.transferido_tesouraria = 'Y';
+    END IF;
+
+    		IF NEW.status_pagamento = 'Pago' THEN
+        INSERT INTO erp_lcto_tesouraria (data_pgto, erp_forma_pagamento_id, erp_lcto_historico_id, conta_credito, conta_debito, valor)
+        VALUES (NEW.data_vencimento, NEW.erp_forma_pagamento_id, NEW.erp_lcto_historico_id, NEW.conta_credito, 32, NEW.valor);
+    END IF;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- Copiando estrutura para trigger edurondon.erp_contas_receber_before_update
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `erp_contas_receber_before_update` BEFORE UPDATE ON `erp_contas_receber` FOR EACH ROW BEGIN
+    IF NEW.data_vencimento < CURDATE() AND NEW.status_pagamento = 'Pendente' THEN
+        SET NEW.status_pagamento = 'Atrasado';
+    ELSE
+        IF NEW.data_vencimento >= CURDATE() AND NEW.status_pagamento = 'Atrasado' THEN
+            SET NEW.status_pagamento = 'Pendente';
+        END IF;
+    END IF;
+
+	 IF NEW.status_pagamento = 'Pago' THEN
+        SET NEW.transferido_tesouraria = 'Y';
+    END IF;
+
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- Copiando estrutura para trigger edurondon.erp_contas_receber_itens_after_delete
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `erp_contas_receber_itens_after_delete` AFTER DELETE ON `erp_contas_receber_itens` FOR EACH ROW BEGIN
+UPDATE erp_contas_receber
+SET erp_contas_receber.valor = (
+        SELECT SUM(erp_contas_receber_itens.valor) AS total
+        FROM erp_contas_receber_itens
+        WHERE erp_contas_receber_itens.erp_contas_receber_id = erp_contas_receber.id
+        LIMIT 1
+    )
+WHERE erp_contas_receber.id IN (
+        SELECT erp_contas_receber_itens.erp_contas_receber_id
+        FROM erp_contas_receber_itens
+    );
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- Copiando estrutura para trigger edurondon.erp_contas_receber_itens_after_insert
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `erp_contas_receber_itens_after_insert` AFTER INSERT ON `erp_contas_receber_itens` FOR EACH ROW BEGIN
+UPDATE erp_contas_receber
+SET erp_contas_receber.valor = (
+        SELECT SUM(erp_contas_receber_itens.valor) AS total
+        FROM erp_contas_receber_itens
+        WHERE erp_contas_receber_itens.erp_contas_receber_id = erp_contas_receber.id
+        LIMIT 1
+    )
+WHERE erp_contas_receber.id IN (
+        SELECT erp_contas_receber_itens.erp_contas_receber_id
+        FROM erp_contas_receber_itens
+    );
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- Copiando estrutura para trigger edurondon.erp_contas_receber_itens_after_update
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `erp_contas_receber_itens_after_update` AFTER UPDATE ON `erp_contas_receber_itens` FOR EACH ROW BEGIN
+UPDATE erp_contas_receber
+SET erp_contas_receber.valor = (
+        SELECT SUM(erp_contas_receber_itens.valor) AS total
+        FROM erp_contas_receber_itens
+        WHERE erp_contas_receber_itens.erp_contas_receber_id = erp_contas_receber.id
+        LIMIT 1
+    )
+WHERE erp_contas_receber.id IN (
+        SELECT erp_contas_receber_itens.erp_contas_receber_id
+        FROM erp_contas_receber_itens
+    );
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- Copiando estrutura para trigger edurondon.erp_cotacao_itens_after_delete
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO';
+DELIMITER //
+CREATE TRIGGER `erp_cotacao_itens_after_delete` AFTER DELETE ON `erp_cotacao_itens` FOR EACH ROW BEGIN
+UPDATE erp_cotacao
+   SET erp_cotacao.valor_total = (
+       	SELECT 	Sum((erp_cotacao_itens.valor * erp_cotacao_itens.qtd)) AS total
+			FROM 		erp_cotacao_itens
+			WHERE 	(erp_cotacao_itens.erp_cotacao_id = erp_cotacao.id)
+			limit 1
+											)
+WHERE	(SELECT 	erp_cotacao_itens.erp_cotacao_id
+		 FROM 	erp_cotacao_itens
+		 WHERE	erp_cotacao_itens.erp_cotacao_id = erp_cotacao.id
+		 LIMIT 1);
+
+UPDATE erp_produtos
+   SET erp_produtos.valor_medio = (
+			SELECT avg(erp_cotacao_itens.valor) as valor FROM erp_cotacao_itens
+			WHERE (erp_cotacao_itens.erp_produtos_id = erp_produtos.id)
+			limit 1
+		)
+
+WHERE	(SELECT 	erp_cotacao_itens.erp_produtos_id
+		 FROM 	erp_cotacao_itens
+		 WHERE	erp_cotacao_itens.erp_produtos_id = erp_produtos.id
+		 LIMIT 1);
+
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- Copiando estrutura para trigger edurondon.erp_cotacao_itens_after_insert
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO';
+DELIMITER //
+CREATE TRIGGER `erp_cotacao_itens_after_insert` AFTER INSERT ON `erp_cotacao_itens` FOR EACH ROW BEGIN
+UPDATE erp_cotacao
+   SET erp_cotacao.valor_total = (
+       	SELECT 	Sum((erp_cotacao_itens.valor * erp_cotacao_itens.qtd)) AS total
+			FROM 		erp_cotacao_itens
+			WHERE 	(erp_cotacao_itens.erp_cotacao_id = erp_cotacao.id)
+			limit 1
+											)
+WHERE	(SELECT 	erp_cotacao_itens.erp_cotacao_id
+		 FROM 	erp_cotacao_itens
+		 WHERE	erp_cotacao_itens.erp_cotacao_id = erp_cotacao.id
+		 LIMIT 1);
+
+UPDATE erp_produtos
+   SET erp_produtos.valor_medio = (
+			SELECT avg(erp_cotacao_itens.valor) as valor FROM erp_cotacao_itens
+			WHERE (erp_cotacao_itens.erp_produtos_id = erp_produtos.id)
+			limit 1
+		)
+
+WHERE	(SELECT 	erp_cotacao_itens.erp_produtos_id
+		 FROM 	erp_cotacao_itens
+		 WHERE	erp_cotacao_itens.erp_produtos_id = erp_produtos.id
+		 LIMIT 1);
+
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- Copiando estrutura para trigger edurondon.erp_cotacao_itens_after_update
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO';
+DELIMITER //
+CREATE TRIGGER `erp_cotacao_itens_after_update` AFTER UPDATE ON `erp_cotacao_itens` FOR EACH ROW BEGIN
+UPDATE erp_cotacao
+   SET erp_cotacao.valor_total = (
+       	SELECT 	Sum((erp_cotacao_itens.valor * erp_cotacao_itens.qtd)) AS total
+			FROM 		erp_cotacao_itens
+			WHERE 	(erp_cotacao_itens.erp_cotacao_id = erp_cotacao.id)
+			limit 1
+											)
+WHERE	(SELECT 	erp_cotacao_itens.erp_cotacao_id
+		 FROM 	erp_cotacao_itens
+		 WHERE	erp_cotacao_itens.erp_cotacao_id = erp_cotacao.id
+		 LIMIT 1);
+
+UPDATE erp_produtos
+   SET erp_produtos.valor_medio = (
+			SELECT avg(erp_cotacao_itens.valor) as valor FROM erp_cotacao_itens
+			WHERE (erp_cotacao_itens.erp_produtos_id = erp_produtos.id)
+			limit 1
+		)
+
+WHERE	(SELECT 	erp_cotacao_itens.erp_produtos_id
+		 FROM 	erp_cotacao_itens
+		 WHERE	erp_cotacao_itens.erp_produtos_id = erp_produtos.id
+		 LIMIT 1);
+
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- Copiando estrutura para trigger edurondon.erp_lcto_tesouraria_itens_after_delete
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `erp_lcto_tesouraria_itens_after_delete` AFTER DELETE ON `erp_lcto_tesouraria_itens` FOR EACH ROW BEGIN
+UPDATE erp_lcto_tesouraria
+SET erp_lcto_tesouraria.valor = (
+        SELECT SUM(erp_lcto_tesouraria_itens.valor) AS total
+        FROM erp_lcto_tesouraria_itens
+        WHERE erp_lcto_tesouraria_itens.erp_lcto_tesouraria_id = erp_lcto_tesouraria.id
+        LIMIT 1
+    )
+WHERE erp_lcto_tesouraria.id IN (
+        SELECT erp_lcto_tesouraria_itens.erp_lcto_tesouraria_id
+        FROM erp_lcto_tesouraria_itens
+    );
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- Copiando estrutura para trigger edurondon.erp_lcto_tesouraria_itens_after_insert
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `erp_lcto_tesouraria_itens_after_insert` AFTER INSERT ON `erp_lcto_tesouraria_itens` FOR EACH ROW BEGIN
+UPDATE erp_lcto_tesouraria
+SET erp_lcto_tesouraria.valor = (
+        SELECT SUM(erp_lcto_tesouraria_itens.valor) AS total
+        FROM erp_lcto_tesouraria_itens
+        WHERE erp_lcto_tesouraria_itens.erp_lcto_tesouraria_id = erp_lcto_tesouraria.id
+        LIMIT 1
+    )
+WHERE erp_lcto_tesouraria.id IN (
+        SELECT erp_lcto_tesouraria_itens.erp_lcto_tesouraria_id
+        FROM erp_lcto_tesouraria_itens
+    );
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- Copiando estrutura para trigger edurondon.erp_lcto_tesouraria_itens_after_update
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `erp_lcto_tesouraria_itens_after_update` AFTER UPDATE ON `erp_lcto_tesouraria_itens` FOR EACH ROW BEGIN
+UPDATE erp_lcto_tesouraria
+SET erp_lcto_tesouraria.valor = (
+        SELECT SUM(erp_lcto_tesouraria_itens.valor) AS total
+        FROM erp_lcto_tesouraria_itens
+        WHERE erp_lcto_tesouraria_itens.erp_lcto_tesouraria_id = erp_lcto_tesouraria.id
+        LIMIT 1
+    )
+WHERE erp_lcto_tesouraria.id IN (
+        SELECT erp_lcto_tesouraria_itens.erp_lcto_tesouraria_id
+        FROM erp_lcto_tesouraria_itens
+    );
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
