@@ -11,20 +11,8 @@ CREATE TABLE IF NOT EXISTS `erp_compras` (
   `erp_status_compra_id` int(10) unsigned DEFAULT NULL,
   `active` char(1) COLLATE utf8_bin NOT NULL DEFAULT 'Y',
   `data_lancamento` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `FK_erp_compras_erp_cotacao` (`erp_cotacao_id`),
-  KEY `FK_erp_compras_erp_status_compra` (`erp_status_compra_id`),
-  KEY `FK_erp_compras_erp_forma_pagamento` (`erp_forma_pagamento_id`),
-  KEY `FK_erp_compras_erp_destinacao_recurso` (`erp_destinacao_recurso_id`),
-  KEY `FK_erp_compras_system_user` (`membro_comprador_system_users_id`) USING BTREE,
-  CONSTRAINT `FK_erp_compras_erp_cotacao` FOREIGN KEY (`erp_cotacao_id`) REFERENCES `erp_cotacao` (`id`),
-  CONSTRAINT `FK_erp_compras_erp_destinacao_recurso` FOREIGN KEY (`erp_destinacao_recurso_id`) REFERENCES `erp_destinacao_recurso` (`id`),
-  CONSTRAINT `FK_erp_compras_erp_forma_pagamento` FOREIGN KEY (`erp_forma_pagamento_id`) REFERENCES `erp_forma_pagamento` (`id`),
-  CONSTRAINT `FK_erp_compras_erp_status_compra` FOREIGN KEY (`erp_status_compra_id`) REFERENCES `erp_status_compra` (`id`),
-  CONSTRAINT `FK_erp_compras_system_users` FOREIGN KEY (`membro_comprador_system_users_id`) REFERENCES `system_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- Exportação de dados foi desmarcado.
+CHECKED ^
 
 -- Copiando estrutura para tabela edurondon.erp_compras_itens
 CREATE TABLE IF NOT EXISTS `erp_compras_itens` (
@@ -34,14 +22,9 @@ CREATE TABLE IF NOT EXISTS `erp_compras_itens` (
   `qtd` double NOT NULL DEFAULT '0',
   `erp_compras_id` int(11) NOT NULL DEFAULT '0',
   `data_lancamento` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `FK_erp_compras_itens_erp_compras` (`erp_compras_id`),
-  KEY `FK_erp_compras_itens_erp_produtos` (`erp_produtos_id`),
-  CONSTRAINT `FK_erp_compras_itens_erp_compras` FOREIGN KEY (`erp_compras_id`) REFERENCES `erp_compras` (`id`),
-  CONSTRAINT `FK_erp_compras_itens_erp_produtos` FOREIGN KEY (`erp_produtos_id`) REFERENCES `erp_produtos` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- Exportação de dados foi desmarcado.
+CHECKED ^
+
 
 -- Copiando estrutura para tabela edurondon.erp_contas_pagar
 CREATE TABLE IF NOT EXISTS `erp_contas_pagar` (
@@ -62,20 +45,10 @@ CREATE TABLE IF NOT EXISTS `erp_contas_pagar` (
   `active` varchar(1) DEFAULT 'Y',
   `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `transferido_tesouraria` varchar(1) NOT NULL DEFAULT 'N',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `FK_erp_contas_pagar_erp_pessoa_fornecedor` (`erp_pessoa_fornecedor_id`) USING BTREE,
-  KEY `FK_erp_contas_pagar_erp_destinacao_recurso` (`erp_destinacao_recurso_id`),
-  KEY `FK_erp_contas_pagar_erp_lcto_historico` (`erp_lcto_historico_id`),
-  KEY `FK_erp_contas_pagar_erp_plano_contas` (`conta_debito`) USING BTREE,
-  KEY `FK_erp_contas_pagar_system_user` (`responsavel_id`) USING BTREE,
-  KEY `FK_erp_contas_pagar_erp_forma_pagamento` (`erp_forma_pagamento_id`) USING BTREE,
-  CONSTRAINT `FK_erp_contas_pagar_erp_destinacao_recurso` FOREIGN KEY (`erp_destinacao_recurso_id`) REFERENCES `erp_destinacao_recurso` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `FK_erp_contas_pagar_erp_forma_pagamento` FOREIGN KEY (`erp_forma_pagamento_id`) REFERENCES `erp_forma_pagamento` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `FK_erp_contas_pagar_erp_lcto_historico` FOREIGN KEY (`erp_lcto_historico_id`) REFERENCES `erp_lcto_historico` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `FK_erp_contas_pagar_erp_pessoa_fornecedor` FOREIGN KEY (`erp_pessoa_fornecedor_id`) REFERENCES `erp_pessoa_fornecedor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `FK_erp_contas_pagar_erp_plano_contas` FOREIGN KEY (`conta_debito`) REFERENCES `erp_plano_contas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `FK_erp_contas_pagar_system_user` FOREIGN KEY (`responsavel_id`) REFERENCES `system_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=999808 DEFAULT CHARSET=utf8;
+
+
+CHECKED ^
+
 
 -- Exportação de dados foi desmarcado.
 
