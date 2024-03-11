@@ -1,6 +1,6 @@
 import java.time.LocalDateTime;
 
-public class ErpStatusCompra {
+public class ErpTipoProduto {
     private int id;
     private String name;
     private String description;

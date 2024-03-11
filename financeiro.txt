@@ -64,6 +64,10 @@ CREATE TABLE IF NOT EXISTS `erp_contas_pagar_itens` (
   CONSTRAINT `FK_erp_contas_pagar_itens_erp_contas_pagar` FOREIGN KEY (`erp_contas_pagar_id`) REFERENCES `erp_contas_pagar` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9602 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+
+CHECKED ^
+
+
 -- Exportação de dados foi desmarcado.
 
 -- Copiando estrutura para tabela edurondon.erp_contas_receber
@@ -94,6 +98,11 @@ CREATE TABLE IF NOT EXISTS `erp_contas_receber` (
   CONSTRAINT `FK_erp_contas_receber_system_user` FOREIGN KEY (`responsavel_id`) REFERENCES `system_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=1785836 DEFAULT CHARSET=utf8;
 
+
+CHECKED ^
+
+
+
 -- Exportação de dados foi desmarcado.
 
 -- Copiando estrutura para tabela edurondon.erp_contas_receber_itens
@@ -107,6 +116,10 @@ CREATE TABLE IF NOT EXISTS `erp_contas_receber_itens` (
   KEY `FK_erp_contas_receber_itens_erp_contas_receber` (`erp_contas_receber_id`) USING BTREE,
   CONSTRAINT `FK_erp_contas_receber_itens_erp_contas_receber` FOREIGN KEY (`erp_contas_receber_id`) REFERENCES `erp_contas_receber` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24462 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+CHECKED ^
+
 
 -- Exportação de dados foi desmarcado.
 
@@ -123,6 +136,11 @@ CREATE TABLE IF NOT EXISTS `erp_cotacao` (
   KEY `FK_erp_cotacao_erp_pessoa_fornecedor` (`erp_pessoa_fornecedor_id`),
   CONSTRAINT `FK_erp_cotacao_erp_pessoa_fornecedor` FOREIGN KEY (`erp_pessoa_fornecedor_id`) REFERENCES `erp_pessoa_fornecedor` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+CHECKED ^
+
+
 
 -- Exportação de dados foi desmarcado.
 
@@ -141,6 +159,12 @@ CREATE TABLE IF NOT EXISTS `erp_cotacao_itens` (
   CONSTRAINT `FK_if_empenhos_itens_if_produtos` FOREIGN KEY (`erp_produtos_id`) REFERENCES `erp_produtos` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+
+
+CHECKED ^
+
+
+
 -- Exportação de dados foi desmarcado.
 
 -- Copiando estrutura para tabela edurondon.erp_destinacao_recurso
@@ -152,6 +176,12 @@ CREATE TABLE IF NOT EXISTS `erp_destinacao_recurso` (
   `data_lancamento` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+
+CHECKED ^
+
+
 
 -- Exportação de dados foi desmarcado.
 
@@ -165,6 +195,12 @@ CREATE TABLE IF NOT EXISTS `erp_forma_pagamento` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+
+
+CHECKED ^
+
+
+
 -- Exportação de dados foi desmarcado.
 
 -- Copiando estrutura para tabela edurondon.erp_lcto_historico
@@ -174,6 +210,12 @@ CREATE TABLE IF NOT EXISTS `erp_lcto_historico` (
   `active` char(1) COLLATE utf8_bin NOT NULL DEFAULT 'Y',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+
+CHECKED ^
+
+
 
 -- Exportação de dados foi desmarcado.
 
@@ -204,6 +246,12 @@ CREATE TABLE IF NOT EXISTS `erp_lcto_tesouraria` (
   CONSTRAINT `FK_erp_lcto_tesouraria_system_user` FOREIGN KEY (`responsavel_id`) REFERENCES `system_users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14857749 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+
+
+CHECKED ^
+
+
+
 -- Exportação de dados foi desmarcado.
 
 -- Copiando estrutura para tabela edurondon.erp_lcto_tesouraria_itens
@@ -219,6 +267,12 @@ CREATE TABLE IF NOT EXISTS `erp_lcto_tesouraria_itens` (
   CONSTRAINT `FK_erp_lcto_tesouraria_itens_erp_lcto_tesouraria` FOREIGN KEY (`erp_lcto_tesouraria_id`) REFERENCES `erp_lcto_tesouraria` (`id`),
   CONSTRAINT `FK_erp_lcto_tesouraria_itens_system_unit` FOREIGN KEY (`system_unit_id`) REFERENCES `system_unit` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+
+CHECKED ^
+
+
 
 -- Exportação de dados foi desmarcado.
 
@@ -236,6 +290,12 @@ CREATE TABLE IF NOT EXISTS `erp_pessoa_fornecedor` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1180627 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+
+
+CHECKED ^
+
+
+
 -- Exportação de dados foi desmarcado.
 
 -- Copiando estrutura para tabela edurondon.erp_plano_contas
@@ -251,6 +311,12 @@ CREATE TABLE IF NOT EXISTS `erp_plano_contas` (
   `saldo_inicial` double(65,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+
+CHECKED ^
+
+
 
 -- Exportação de dados foi desmarcado.
 
@@ -271,6 +337,12 @@ CREATE TABLE IF NOT EXISTS `erp_produtos` (
   CONSTRAINT `FK_erp_produtos_erp_unidade_medida` FOREIGN KEY (`erp_unidade_medida_id`) REFERENCES `erp_unidade_medida` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=35153 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT;
 
+
+
+CHECKED ^
+
+
+
 -- Exportação de dados foi desmarcado.
 
 -- Copiando estrutura para tabela edurondon.erp_status_compra
@@ -282,6 +354,11 @@ CREATE TABLE IF NOT EXISTS `erp_status_compra` (
   `data_lancamento` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+CHECKED ^
+
+
 
 -- Exportação de dados foi desmarcado.
 
@@ -295,6 +372,12 @@ CREATE TABLE IF NOT EXISTS `erp_tipo_produto` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+
+
+CHECKED ^
+
+
+
 -- Exportação de dados foi desmarcado.
 
 -- Copiando estrutura para tabela edurondon.erp_unidade_medida
@@ -307,6 +390,12 @@ CREATE TABLE IF NOT EXISTS `erp_unidade_medida` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+
+
+CHECKED ^
+
+
+
 -- Exportação de dados foi desmarcado.
 
 -- Copiando estrutura para tabela edurondon.ibge_bairro
@@ -318,6 +407,12 @@ CREATE TABLE IF NOT EXISTS `ibge_bairro` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=247 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+
+
+CHECKED ^
+
+
+
 -- Exportação de dados foi desmarcado.
 
 -- Copiando estrutura para tabela edurondon.ibge_categoria_racial
@@ -326,6 +421,12 @@ CREATE TABLE IF NOT EXISTS `ibge_categoria_racial` (
   `description` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+
+
+
+CHECKED ^
+
+
 
 -- Exportação de dados foi desmarcado.
 
@@ -341,6 +442,12 @@ CREATE TABLE IF NOT EXISTS `ibge_estado` (
   CONSTRAINT `FK_ibge_estado_ibge_regiao` FOREIGN KEY (`ibge_regiao_id`) REFERENCES `ibge_regiao` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+
+
+CHECKED ^
+
+
+
 -- Exportação de dados foi desmarcado.
 
 -- Copiando estrutura para tabela edurondon.ibge_logradouros
@@ -354,6 +461,12 @@ CREATE TABLE IF NOT EXISTS `ibge_logradouros` (
   KEY `FK_ibge_logradouros_ibge_bairro` (`ibge_bairro_id`),
   CONSTRAINT `FK_ibge_logradouros_ibge_bairro` FOREIGN KEY (`ibge_bairro_id`) REFERENCES `ibge_bairro` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+CHECKED ^
+
+
 
 -- Exportação de dados foi desmarcado.
 
@@ -370,6 +483,12 @@ CREATE TABLE IF NOT EXISTS `ibge_municipio` (
   CONSTRAINT `FK_ibge_municipio_ibge_estado` FOREIGN KEY (`ibge_estado_id`) REFERENCES `ibge_estado` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9654 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+
+
+CHECKED ^
+
+
+
 -- Exportação de dados foi desmarcado.
 
 -- Copiando estrutura para tabela edurondon.ibge_regiao
@@ -378,6 +497,12 @@ CREATE TABLE IF NOT EXISTS `ibge_regiao` (
   `nome` text COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+
+CHECKED ^
+
+
 
 -- Exportação de dados foi desmarcado.
 
@@ -401,6 +526,12 @@ CREATE TABLE IF NOT EXISTS `system_unit` (
   KEY `sys_unit_name_idx` (`name`),
   CONSTRAINT `FK_system_unit_ibge_municipio` FOREIGN KEY (`ibge_municipio_id`) REFERENCES `ibge_municipio` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+
+CHECKED ^
+
+
 
 -- Exportação de dados foi desmarcado.
 
@@ -433,6 +564,12 @@ CREATE TABLE IF NOT EXISTS `system_users` (
   KEY `FK_system_user_system_unit` (`system_unit_id`),
   CONSTRAINT `FK_system_user_system_unit` FOREIGN KEY (`system_unit_id`) REFERENCES `system_unit` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+
+CHECKED ^
+
+
 
 -- Exportação de dados foi desmarcado.
 
