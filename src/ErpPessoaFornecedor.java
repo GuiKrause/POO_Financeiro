@@ -1,6 +1,6 @@
 import java.time.LocalDateTime;
 
-public class ErpPessoaFornecedor {
+public class ErpPessoaFornecedor extends Pessoa{
     private int id;
     private String cnpj;
     private String responsavel;
@@ -10,6 +10,19 @@ public class ErpPessoaFornecedor {
     private String razao_social;
     private boolean active;
     private LocalDateTime data_lancamento;
+
+    public ErpPessoaFornecedor(int id, String cnpj, String responsavel, String contato, String telefones, String fantasia, String razao_social, boolean active, LocalDateTime data_lancamento) {
+        super(active);
+        this.id = id;
+        this.cnpj = cnpj;
+        this.responsavel = responsavel;
+        this.contato = contato;
+        this.telefones = telefones;
+        this.fantasia = fantasia;
+        this.razao_social = razao_social;
+        this.active = active;
+        this.data_lancamento = data_lancamento;
+    }
 
     public int getId() {
         return id;

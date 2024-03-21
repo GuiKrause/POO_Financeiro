@@ -1,4 +1,4 @@
-public class SystemUsers {
+public class SystemUsers extends Pessoa {
     private int id;
     private String name;
     private String email;
@@ -8,7 +8,6 @@ public class SystemUsers {
     private SystemUnit system_unit_id;
     private int frontpage_id;
     private String photo_path;
-    private boolean active;
     private boolean accepted_term_policy;
     private String accepted_term_policy_at;
     private String accepted_term_policy_data;
@@ -18,6 +17,28 @@ public class SystemUsers {
     private String function_name;
     private String custom_code;
     private String otp_secret;
+
+    public SystemUsers(int id, String name, String email, String site, String login, String password, SystemUnit system_unit_id, int frontpage_id, String photo_path, boolean accepted_term_policy, String accepted_term_policy_at, String accepted_term_policy_data, String phone, String address, String about, String function_name, String custom_code, String otp_secret, boolean active) {
+        super(active);
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.site = site;
+        this.login = login;
+        this.password = password;
+        this.system_unit_id = system_unit_id;
+        this.frontpage_id = frontpage_id;
+        this.photo_path = photo_path;
+        this.accepted_term_policy = accepted_term_policy;
+        this.accepted_term_policy_at = accepted_term_policy_at;
+        this.accepted_term_policy_data = accepted_term_policy_data;
+        this.phone = phone;
+        this.address = address;
+        this.about = about;
+        this.function_name = function_name;
+        this.custom_code = custom_code;
+        this.otp_secret = otp_secret;
+    }
 
     public int getId() {
         return id;

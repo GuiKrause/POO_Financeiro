@@ -154,4 +154,8 @@ public class ErpContasPagar {
     public void setTransferido_tesouraria(String transferido_tesouraria) {
         this.transferido_tesouraria = transferido_tesouraria;
     }
+
+    public void calcularValor(double desconto, double juros) {
+
+    }
 }
