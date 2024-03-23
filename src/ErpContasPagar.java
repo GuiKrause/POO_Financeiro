@@ -156,6 +156,8 @@ public class ErpContasPagar {
     }
 
     public void calcularValor(double desconto, double juros) {
-
+        double valorCalculado = this.valor;
+        double valorComDesconto = valorCalculado - desconto;
+        double valorComJuros = valorCalculado + juros;
     }
 }
