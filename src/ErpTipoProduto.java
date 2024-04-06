@@ -1,11 +1,21 @@
 import java.time.LocalDateTime;
 
-public class ErpTipoProduto {
+public class ErpTipoProduto implements CadastroAtualizavel{
     private int id;
     private String name;
     private String description;
     private boolean active;
     private LocalDateTime data_lancamento;
+
+    @Override
+    public void cadastrarInformacoes() {
+
+    }
+
+    @Override
+    public void atualizarInformacoes() {
+
+    }
 
     public int getId() {
         return id;

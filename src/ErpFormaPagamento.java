@@ -1,12 +1,15 @@
 import java.time.LocalDateTime;
 
-public class ErpFormaPagamento {
+public class ErpFormaPagamento implements Pagavel{
     private int id;
     private String name;
     private String description;
     private boolean active;
     private LocalDateTime data_lancamento;
+    @Override
+    public void processarPagemento() {
 
+    }
     public int getId() {
         return id;
     }

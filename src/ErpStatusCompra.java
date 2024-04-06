@@ -1,12 +1,16 @@
 import java.time.LocalDateTime;
 
-public class ErpStatusCompra {
+public class ErpStatusCompra implements StatusAtualizavel{
     private int id;
     private String name;
     private String description;
     private boolean active;
     private LocalDateTime data_lancamento;
 
+    @Override
+    public void atualizarStatus() {
+
+    }
     public int getId() {
         return id;
     }

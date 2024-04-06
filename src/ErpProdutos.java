@@ -1,6 +1,6 @@
 import java.time.LocalDateTime;
 
-public class ErpProdutos {
+public class ErpProdutos implements Ativavel{
     private int id;
     private String nome;
     private String descricao;
@@ -9,6 +9,16 @@ public class ErpProdutos {
     private boolean active;
     private double valor_medio;
     private LocalDateTime data_lancamento;
+
+    @Override
+    public void ativar() {
+
+    }
+
+    @Override
+    public void desativar() {
+
+    }
 
     public int getId() {
         return id;

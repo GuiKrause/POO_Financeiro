@@ -1,13 +1,24 @@
 import java.time.LocalDateTime;
 
-public class ErpCotacaoItens {
+public class ErpCotacaoItens implements ItemGestao{
     private int id;
     private double valor;
     private ErpProdutos erp_produtos_id;
     private double qtd;
     private ErpCotacao erp_cotacao_id;
     private LocalDateTime data_lancamento;
+    @Override
+    public void adicionarItens() {
 
+    }
+    @Override
+    public void atualizarItens() {
+
+    }
+    @Override
+    public void removerItens() {
+
+    }
     public int getId() {
         return id;
     }

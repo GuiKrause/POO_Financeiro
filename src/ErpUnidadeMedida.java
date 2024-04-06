@@ -1,11 +1,21 @@
 import java.time.LocalDateTime;
 
-public class ErpUnidadeMedida {
+public class ErpUnidadeMedida implements CadastroAtualizavel{
     private int id;
     private String name;
     private String description;
     private boolean active;
     private LocalDateTime data_lancamento;
+
+    @Override
+    public void atualizarInformacoes() {
+
+    }
+
+    @Override
+    public void cadastrarInformacoes() {
+
+    }
 
     public int getId() {
         return id;

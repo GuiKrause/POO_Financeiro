@@ -1,6 +1,6 @@
 import java.time.LocalDateTime;
 
-public class ErpPessoaFornecedor extends Pessoa{
+public class ErpPessoaFornecedor extends Pessoa implements Ativavel{
     private int id;
     private String cnpj;
     private String responsavel;
@@ -22,6 +22,16 @@ public class ErpPessoaFornecedor extends Pessoa{
         this.razao_social = razao_social;
         this.active = active;
         this.data_lancamento = data_lancamento;
+    }
+
+    @Override
+    public void ativar() {
+
+    }
+
+    @Override
+    public void desativar() {
+
     }
 
     public int getId() {

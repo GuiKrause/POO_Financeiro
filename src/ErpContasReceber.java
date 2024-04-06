@@ -1,6 +1,6 @@
 import java.time.LocalDateTime;
 
-public class ErpContasReceber {
+public class ErpContasReceber implements Transacao, RelatorioFinanceiro, Calculavel {
     private int id;
     private LocalDateTime data_emissao;
     private LocalDateTime data_vencimento;
@@ -16,6 +16,19 @@ public class ErpContasReceber {
     private boolean active;
     private LocalDateTime datatime;
     private boolean transferido_tesouraria;
+    @Override
+    public void registrar() {
+
+    }
+    @Override
+    public void gerarRelatorio() {
+
+    }
+
+    @Override
+    public void calcularTotal() {
+
+    }
 
     public int getId() {
         return id;

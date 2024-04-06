@@ -1,6 +1,6 @@
 import java.time.LocalDateTime;
 
-public class ErpComprasItens {
+public class ErpComprasItens implements ItemGestao {
     private int id;
     private double valor;
     private ErpProdutos erp_produtos_id;
@@ -8,6 +8,18 @@ public class ErpComprasItens {
     private ErpCompras erp_compras_id;
     private LocalDateTime data_lancamento;
 
+    @Override
+    public void adicionarItens() {
+
+    }
+    @Override
+    public void atualizarItens() {
+
+    }
+    @Override
+    public void removerItens() {
+
+    }
     public int getId() {
         return id;
     }

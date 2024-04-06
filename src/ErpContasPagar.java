@@ -1,6 +1,6 @@
 import java.time.LocalDateTime;
 
-public class ErpContasPagar {
+public class ErpContasPagar implements Transacao, RelatorioFinanceiro{
     private int id;
     private LocalDateTime data_emissao;
     private LocalDateTime data_vencimento;
@@ -18,6 +18,16 @@ public class ErpContasPagar {
     private boolean active;
     private LocalDateTime datetime;
     private String transferido_tesouraria;
+
+    @Override
+    public void registrar() {
+
+    }
+
+    @Override
+    public void gerarRelatorio() {
+
+    }
 
     public int getId() {
         return id;

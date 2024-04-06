@@ -1,5 +1,5 @@
 import java.time.LocalDateTime;
-public class ErpCompras {
+public class ErpCompras implements StatusAtualizavel, Calculavel{
     private int id;
     private String numero_requisicao;
     private SystemUsers membro_comprador_system_users_id;
@@ -11,6 +11,15 @@ public class ErpCompras {
     private ErpStatusCompra erp_status_compra_id;
     private boolean active;
     private LocalDateTime data_lancamento;
+    @Override
+    public void atualizarStatus() {
+
+    }
+
+    @Override
+    public void calcularTotal() {
+
+    }
 
     public int getId() {
         return id;
